@@ -1,0 +1,3 @@
+xlwt==1.3.0
+python_nmap
+nmap==0.0.1
