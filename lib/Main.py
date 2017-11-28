@@ -3,6 +3,7 @@ from publicScan import *
 from publicEmail import *
 from publicWeakpass import *
 from createXLS import *
+import os
 
 NAME, VERSION, AUTHOR, LICENSE = "Public Monitor", "V0.1", "咚咚呛", "Public (FREE)"
 
@@ -11,6 +12,9 @@ def main(conf_info):
     conf_info['result_info'], conf_info['change_add_list'], conf_info['change_del_list'], conf_info['weakpass_result'], \
     conf_info['xlsfile'], = \
         [], [], [], [], ""
+
+    if not os.path.exists('out'):
+        os.mkdir('out')
 
     if conf_info['type'] != "weakpass":
         pscan = PublicScan(conf_info['ip_file'], conf_info['rate'])
