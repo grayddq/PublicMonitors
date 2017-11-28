@@ -15,6 +15,10 @@ def main(conf_info):
 
     if not os.path.exists('out'):
         os.mkdir('out')
+    if not os.path.exists('log'):
+        os.mkdir('log')
+    if not os.path.exists('tmp'):
+        os.mkdir('tmp')
 
     if conf_info['type'] != "weakpass":
         pscan = PublicScan(conf_info['ip_file'], conf_info['rate'])
