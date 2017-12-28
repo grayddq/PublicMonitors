@@ -1,3 +1,3 @@
 xlwt==1.3.0
-python_nmap
+python_nmap==0.6.1
 nmap==0.0.1
