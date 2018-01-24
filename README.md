@@ -48,6 +48,8 @@
 > cp bin/masscan /bin/masscan
 >
 > git clone https://github.com/grayddq/PublicMonitors.git
+> 
+> sudo pip install -U pip
 >
 > sudo pip install -r requirements.txt
 
