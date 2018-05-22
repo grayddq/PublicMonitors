@@ -16,16 +16,17 @@ class PublicScan:
             os.mkdir('tmp')
         if os.path.exists('tmp/tempResult'):
             os.remove('tmp/tempResult')
-        os.system('masscan -iL %s -p1-65535 --rate=%s -oJ tmp/tempResult' % (self.file, self.rate))
+        os.system('masscan -iL %s -p1-1000 --rate=%s -oJ tmp/tempResult' % (self.file, self.rate))
 
     def readResult(self):
         if os.path.exists('tmp/tempResult'):
-            with open('tmp/tempResult') as f:
-                for line in f:
-                    if not 'finished' in line and line:
-                        jsline = json.loads(line.strip("\n").strip(',').strip())
-                        if jsline['ports'][0]['status'] == 'open':
-                            self.measscan_result.append([jsline['ip'], jsline['ports'][0]['port']])
+            f = open('tmp/tempResult')
+            lines = f.readlines()[1:-1]
+            for line in lines:
+                if not 'finished' in line and line:
+                    jsline = json.loads(line.strip("\n").strip(',').strip())
+                    if jsline['ports'][0]['status'] == 'open':
+                        self.measscan_result.append([jsline['ip'], jsline['ports'][0]['port']])
             return True
         else:
             return False
@@ -92,6 +93,7 @@ class PublicScan:
                             self.ip_list.append(line.strip())
                         else:
                             return False
+            print self.ip_list
             return True
         else:
             return False
