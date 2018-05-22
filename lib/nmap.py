@@ -114,7 +114,7 @@ class PortScanner(object):
     PortScanner allows to use nmap from python
     """
     
-    def __init__(self, nmap_search_path=('nmap','/usr/bin/nmap','/usr/local/bin/nmap','/sw/bin/nmap','/opt/local/bin/nmap') ):
+    def __init__(self, nmap_search_path=('nmap','/usr/bin/nmap','/usr/local/bin/nmap','/usr/local/bin/','/opt/local/bin/nmap') ):
         """
         Initialize the module
         detects nmap on the system and nmap version
@@ -123,7 +123,7 @@ class PortScanner(object):
         nmap_search_path = tupple of string where to search for nmap executable. Change this if you want to use a specific version of nmap.
         """
 
-        self._nmap_path = ''                # nmap path
+        self._nmap_path = '/usr/local/bin/nmap'                # nmap path
         self._scan_result = {}
         self._nmap_version_number = 0       # nmap version number
         self._nmap_subversion_number = 0    # nmap subversion number
@@ -133,12 +133,13 @@ class PortScanner(object):
         self.__process = None
 
         # regex used to detect nmap
-        regex = re.compile('Nmap version [0-9]*\.[0-9]*[^ ]* \( http://.* \)')
+        regex = re.compile('Nmap version [0-9]*\.[0-9]*[^ ]* \( https://*.* \)')
         # launch 'nmap -V', we wait after 'Nmap version 5.0 ( http://nmap.org )'
         # This is for Mac OSX. When idle3 is launched from the finder, PATH is not set so nmap was not found
         for nmap_path in nmap_search_path:
             try:
                 p = subprocess.Popen([nmap_path, '-V'], bufsize=10000, stdout=subprocess.PIPE)
+
             except OSError:
                 pass
             else:

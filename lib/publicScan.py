@@ -20,12 +20,13 @@ class PublicScan:
 
     def readResult(self):
         if os.path.exists('tmp/tempResult'):
-            with open('tmp/tempResult') as f:
-                for line in f:
-                    if not 'finished' in line and line:
-                        jsline = json.loads(line.strip("\n").strip(',').strip())
-                        if jsline['ports'][0]['status'] == 'open':
-                            self.measscan_result.append([jsline['ip'], jsline['ports'][0]['port']])
+            f = open('tmp/tempResult')
+            lines = f.readlines()[1:-1]
+            for line in lines:
+                if not 'finished' in line and line:
+                    jsline = json.loads(line.strip("\n").strip(',').strip())
+                    if jsline['ports'][0]['status'] == 'open':
+                        self.measscan_result.append([jsline['ip'], jsline['ports'][0]['port']])
             return True
         else:
             return False
@@ -92,6 +93,7 @@ class PublicScan:
                             self.ip_list.append(line.strip())
                         else:
                             return False
+            print self.ip_list
             return True
         else:
             return False
