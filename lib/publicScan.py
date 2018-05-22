@@ -16,7 +16,7 @@ class PublicScan:
             os.mkdir('tmp')
         if os.path.exists('tmp/tempResult'):
             os.remove('tmp/tempResult')
-        os.system('masscan -iL %s -p1-1000 --rate=%s -oJ tmp/tempResult' % (self.file, self.rate))
+        os.system('masscan -iL %s -p1-65535 --rate=%s -oJ tmp/tempResult' % (self.file, self.rate))
 
     def readResult(self):
         if os.path.exists('tmp/tempResult'):
