@@ -133,7 +133,7 @@ class PortScanner(object):
         self.__process = None
 
         # regex used to detect nmap
-        regex = re.compile('Nmap version [0-9]*\.[0-9]*[^ ]* \( http://.* \)')
+        regex = re.compile('Nmap version [0-9]*\.[0-9]')
         # launch 'nmap -V', we wait after 'Nmap version 5.0 ( http://nmap.org )'
         # This is for Mac OSX. When idle3 is launched from the finder, PATH is not set so nmap was not found
         for nmap_path in nmap_search_path:
@@ -221,7 +221,8 @@ class PortScanner(object):
         assert type(ports) in (str, type(None)), 'Wrong type for [ports], should be a string [was {0}]'.format(type(ports))
         assert type(arguments) is str, 'Wrong type for [arguments], should be a string [was {0}]'.format(type(arguments))
 
-        h_args = shlex.split(hosts)
+        #h_args = shlex.split(hosts)
+        h_args = [hosts]
         f_args = shlex.split(arguments)
         
         # Launch scan
