@@ -22,10 +22,11 @@ class PublicScan:
         if os.path.exists('tmp/tempResult'):
             with open('tmp/tempResult') as f:
                 for line in f:
-                    if not 'finished' in line and line:
-                        jsline = json.loads(line.strip("\n").strip(',').strip())
-                        if jsline['ports'][0]['status'] == 'open':
-                            self.measscan_result.append([jsline['ip'], jsline['ports'][0]['port']])
+                    if line:
+                        if not 'finished' in line and len(line) > 5:
+                            jsline = json.loads(line.strip("\n").strip(',').strip())
+                            if jsline['ports'][0]['status'] == 'open':
+                                self.measscan_result.append([jsline['ip'], jsline['ports'][0]['port']])
             return True
         else:
             return False
