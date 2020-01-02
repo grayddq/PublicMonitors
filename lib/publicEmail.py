@@ -4,6 +4,11 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.mime.application import MIMEApplication
 from Log import *
+from email.header import Header
+from email.utils import formatdate
+import sys
+reload(sys)
+sys.setdefaultencoding('utf-8')
 
 NAME, VERSION, AUTHOR, LICENSE = "Public Monitor", "V0.1", "咚咚呛", "Public (FREE)"
 
@@ -20,9 +25,13 @@ class Send_Email:
         logger = LogInfo(self.syspath + '/log/process.log')
         logger.infostring('start sending mail...')
         msg = MIMEMultipart()
-        msg["Subject"] = "每日端口服务信息详情"
+        msg["Subject"] = Header("每日端口服务信息详情", 'utf-8')
         msg["From"] = self.user
         msg["To"] = self.toemail
+#        msg = MIMEText(body,format,'utf-8')
+        msg["Accept-Language"]="zh-CN"
+        msg["Accept-Charset"]="ISO-8859-1,utf-8"
+        msg['Date']=formatdate(localtime=True)
 
         if self.change_add_list or self.change_del_list or self.weakpass_result:
             msgAlternative = MIMEMultipart('alternative')
@@ -63,7 +72,7 @@ class Send_Email:
 
             msgAlternative.attach(MIMEText(msg_html, 'html', 'utf-8'))
         else:
-            part = MIMEText("端口服务详情请参照附件信息。\n注：端口服务信息并未改变，且不存在弱口令信息")
+            part = MIMEText("端口服务详情请参照附件信息。\n注：端口服务信息并未改变，且不存在弱口令信息".encode('utf-8'),'plain','utf-8')
             msg.attach(part)
         if self.xlsfile:
             part = MIMEApplication(open(self.xlsfile, 'rb').read())
@@ -74,9 +83,9 @@ class Send_Email:
             if error == 3:
                 break
             try:
-                s = smtplib.SMTP(self.smtp_server, timeout=30)
+                s = smtplib.SMTP_SSL(self.smtp_server, 465)
                 s.login(self.user, self.password)
-                s.sendmail(self.user, self.toemail, msg.as_string())
+                s.sendmail(self.user, self.toemail.split(","), msg.as_string())
                 s.close()
                 break
             except smtplib.SMTPException, e:
