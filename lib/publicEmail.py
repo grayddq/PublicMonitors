@@ -9,14 +9,15 @@ NAME, VERSION, AUTHOR, LICENSE = "Public Monitor", "V0.1", "咚咚呛", "Public 
 
 
 class Send_Email:
-    def __init__(self, conf):
+    def __init__(self, conf, syspath):
+        self.syspath = syspath
         self.user, self.password, self.smtp_server, self.toemail, self.xlsfile, \
         self.change_add_list, self.change_del_list, self.weakpass_result = \
             conf['email_user'], conf['email_pass'], conf['smtp_server'], conf['target_email'], \
             conf['xlsfile'], conf['change_add_list'], conf['change_del_list'], conf['weakpass_result']
 
     def send(self):
-        logger = LogInfo('log/process.log')
+        logger = LogInfo(self.syspath + '/log/process.log')
         logger.infostring('start sending mail...')
         msg = MIMEMultipart()
         msg["Subject"] = "每日端口服务信息详情"

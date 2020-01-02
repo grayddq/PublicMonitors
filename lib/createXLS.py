@@ -7,11 +7,12 @@ NAME, VERSION, AUTHOR, LICENSE = "Public Monitor", "V0.1", "咚咚呛", "Public 
 
 
 class Create_Xls:
-    def __init__(self, conf_info):
+    def __init__(self, conf_info, syspath):
+        self.syspath = syspath
         self.result_info, self.change_del_list, self.change_add_list, self.weakpass_result = \
             conf_info['result_info'], conf_info['change_del_list'], conf_info['change_add_list'], conf_info[
                 'weakpass_result']
-        self.logger = LogInfo('log/process.log')
+        self.logger = LogInfo(syspath + '/log/process.log')
 
     def create_xls(self):
         file = Workbook(encoding='utf-8')
@@ -61,9 +62,9 @@ class Create_Xls:
                     table[application].write(row, 4, result['password'])
                     table[application + 'row'] += 1
 
-        if not os.path.exists('out'):
-            os.mkdir('out')
-        filename = 'out/%s.xls' % time.strftime('%Y-%m-%d', time.localtime(time.time()))
+        if not os.path.exists(self.syspath + '/out'):
+            os.mkdir(self.syspath + '/out')
+        filename = self.syspath + '/out/%s.xls' % time.strftime('%Y-%m-%d', time.localtime(time.time()))
         if os.path.exists(filename):
             os.remove(filename)
         file.save(filename)

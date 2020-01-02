@@ -7,12 +7,13 @@ NAME, VERSION, AUTHOR, LICENSE = "Public Monitor", "V0.1", "咚咚呛", "Public 
 
 class Weakpass_Scan():
     # 初始化扫描状态
-    def __init__(self, conf_info):
-        self.target_file = 'out/Result.txt'
+    def __init__(self, conf_info,syspath):
+        self.syspath = syspath
+        self.target_file = syspath + '/out/Result.txt'
         self.user_file = conf_info['db_user']
         self.pass_file = conf_info['db_pass']
         self.infolist, self.weakpass_result = [], []
-        self.logger = LogInfo('log/process.log')
+        self.logger = LogInfo(syspath + '/log/process.log')
 
     def brute(self, host, port, server):
         supported = ['asterisk', 'cisco', 'cisco-enable', 'ftp', 'ftps', 'http-proxy', 'imap', 'imaps', 'mssql',
@@ -60,9 +61,9 @@ class Weakpass_Scan():
                     if line.strip(): self.infolist.append(line.strip())
 
     def callback(self):
-        if not os.path.exists('out'):
-            os.mkdir('out')
-        f = open('out/Weakpass.txt', 'w')
+        if not os.path.exists(self.syspath + '/out'):
+            os.mkdir(self.syspath + '/out')
+        f = open(self.syspath + '/out/Weakpass.txt', 'w')
         for weakpass in self.weakpass_result:
             f.write('host: %s, port: %s, server: %s, user: %s, password: %s\n' % (
                 weakpass['host'], weakpass['server'], weakpass['port'], weakpass['user'], weakpass['password']))

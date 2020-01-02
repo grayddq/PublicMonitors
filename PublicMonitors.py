@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import ConfigParser
+import ConfigParser, os
 from lib.Main import *
 
 NAME, VERSION, AUTHOR, LICENSE = "PublicMonitors", "V0.1", "咚咚呛", "Public (FREE)"
@@ -11,9 +11,10 @@ NAME, VERSION, AUTHOR, LICENSE = "PublicMonitors", "V0.1", "咚咚呛", "Public 
 # 4、输出所有结果到excel，并发送Email通知
 
 if __name__ == '__main__':
+    syspath = os.path.dirname(os.path.abspath(__file__))
     conf_info = {}
     conf = ConfigParser.ConfigParser()
-    conf.read("conf/info.conf")
+    conf.read(syspath + "/conf/info.conf")
     # read by conf
     conf_info['ip_file'] = conf.get("OPTIONS", "ip_file").strip()
     conf_info['db_user'] = conf.get("OPTIONS", "db_user").strip()
@@ -25,4 +26,4 @@ if __name__ == '__main__':
     conf_info['target_email'] = conf.get("Email", "target_email").strip()
     conf_info['smtp_server'] = conf.get("Email", "smtp_server").strip()
 
-    main(conf_info)
+    main(conf_info, syspath)

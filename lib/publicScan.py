@@ -6,21 +6,22 @@ NAME, VERSION, AUTHOR, LICENSE = "Public Monitor", "V0.1", "咚咚呛", "Public 
 
 
 class PublicScan:
-    def __init__(self, file, rate='2000'):
+    def __init__(self, file, rate='2000', syspath=""):
+        self.syspath = syspath
         self.file, self.rate = file, rate
         self.result_info, self.change_del_list, self.change_add_list, self.measscan_result = [], [], [], []
         self.ip_list = []
 
     def Public_masscan(self):
-        if not os.path.exists('tmp'):
-            os.mkdir('tmp')
-        if os.path.exists('tmp/tempResult'):
-            os.remove('tmp/tempResult')
-        os.system('masscan -iL %s -p1-65535 --rate=%s -oJ tmp/tempResult' % (self.file, self.rate))
+        if not os.path.exists(self.syspath + '/tmp'):
+            os.mkdir(self.syspath + '/tmp')
+        if os.path.exists(self.syspath + '/tmp/tempResult'):
+            os.remove(self.syspath + '/tmp/tempResult')
+        os.system('masscan -iL %s -p1-65535 --rate=%s -oJ %s/tmp/tempResult' % (self.file, self.rate, self.syspath))
 
     def readResult(self):
-        if os.path.exists('tmp/tempResult'):
-            with open('tmp/tempResult') as f:
+        if os.path.exists(self.syspath + '/tmp/tempResult'):
+            with open(self.syspath + '/tmp/tempResult') as f:
                 for line in f:
                     if line:
                         if not 'finished' in line and len(line) > 5:
@@ -57,9 +58,9 @@ class PublicScan:
                                 self.result_info.append("%s:%s:%s" % (temp['ip'], temp['port'], temp['server']))
 
     def diff(self):
-        if os.path.exists('out/Result.txt'):
+        if os.path.exists(self.syspath + '/out/Result.txt'):
             oldlist = []
-            with open('out/Result.txt') as f:
+            with open(self.syspath + '/out/Result.txt') as f:
                 for line in f:
                     oldlist.append(line.strip())
             old_change_list = list(set(oldlist).difference(set(self.result_info)))
@@ -69,9 +70,9 @@ class PublicScan:
             self.change_add_list = list(set(self.result_info).difference(set(oldlist)))
 
     def callback(self):
-        if not os.path.exists('out'):
-            os.mkdir('out')
-        fl = open('out/Result.txt', 'w')
+        if not os.path.exists(self.syspath + '/out'):
+            os.mkdir(self.syspath + '/out')
+        fl = open(self.syspath + '/out/Result.txt', 'w')
         for i in self.result_info:
             fl.write(i)
             fl.write("\n")
@@ -98,7 +99,7 @@ class PublicScan:
             return False
 
     def run(self):
-        logger = LogInfo('log/process.log')
+        logger = LogInfo(self.syspath + '/log/process.log')
         logger.infostring('get ip list')
         if not self.get_ip_list():
             logger.infostring('IP files may be wrong.')
