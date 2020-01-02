@@ -16,9 +16,21 @@ if __name__ == '__main__':
     conf = ConfigParser.ConfigParser()
     conf.read(syspath + "/conf/info.conf")
     # read by conf
-    conf_info['ip_file'] = syspath + "/" + conf.get("OPTIONS", "ip_file").strip()
-    conf_info['db_user'] = syspath + "/" + conf.get("OPTIONS", "db_user").strip()
-    conf_info['db_pass'] = syspath + "/" + conf.get("OPTIONS", "db_pass").strip()
+    if conf.get("OPTIONS", "ip_file").strip()[0] == '/':
+        conf_info['ip_file'] = conf.get("OPTIONS", "ip_file").strip()
+    else:
+        conf_info['ip_file'] = syspath + "/" + conf.get("OPTIONS", "ip_file").strip()
+
+    if conf.get("OPTIONS", "db_user").strip()[0] == '/':
+        conf_info['db_user'] = conf.get("OPTIONS", "db_user").strip()
+    else:
+        conf_info['db_user'] = syspath + "/" + conf.get("OPTIONS", "db_user").strip()
+
+    if conf.get("OPTIONS", "db_pass").strip()[0] == '/':
+        conf_info['db_pass'] = conf.get("OPTIONS", "db_pass").strip()
+    else:
+        conf_info['db_pass'] = syspath + "/" + conf.get("OPTIONS", "db_pass").strip()
+
     conf_info['type'] = conf.get("OPTIONS", "type").strip()
     conf_info['rate'] = conf.get("Masscan", "rate").strip()
     conf_info['email_user'] = conf.get("Email", "user").strip()
