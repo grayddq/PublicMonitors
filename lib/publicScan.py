@@ -38,7 +38,7 @@ class PublicScan:
             if ip_port[0] in self.ip_list:
                 scanner = nmap.PortScanner()
                 port = ip_port[1] if isinstance(ip_port[1], int) else int(ip_port[1])
-                scanner.scan(hosts=ip_port[0], arguments='-sS -T4 -p %d' % port)
+                scanner.scan(hosts=ip_port[0], arguments='-sS -Pn -T4 -p %d' % port)
                 for targethost in scanner.all_hosts():
                     for proto in scanner[targethost].all_protocols():
                         lport = scanner[targethost][proto].keys()
